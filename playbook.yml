@@ -1,0 +1,12 @@
+- name: Playbook de création de fichier et stat de fichier
+  hosts: all
+  become: true
+  tasks:
+    - name: Création du fichier
+      file:
+        path: /tmp/test
+        state: touch
+        owner: sarrenne
+    - name: Test de STAT
+      stat:
+        path: /tmp/test
