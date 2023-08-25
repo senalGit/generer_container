@@ -1,0 +1,22 @@
+---
+- name: Playbook de test des templates
+  hosts: all
+  become: true
+  vars:
+    mot: "Bonjour"
+    personnes:
+      - { nom: "SARR", age: "42", ville: "Nantes" }
+      - { nom: "GUILLERMIN", age: "45", ville: "Nantes" }
+    # personne2:
+    #   - { nom: "Ndiaye", age: "15", ville: "Nantes" }
+    #   - { nom: "Diop", age: "18", ville: "Nantes" }
+
+  tasks:
+    - name: Premier template
+      template:
+        src: montemplate2.yml.j2
+        dest: /tmp/montemplate.yml
+        # dest: /tmp/montemplate_{{ item.nom }}.yml
+      with_items:
+        - "{{ personnes }}"
+        #- "{{ personne2 }}"

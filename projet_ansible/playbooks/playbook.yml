@@ -1,0 +1,48 @@
+- name: Playbook de création de fichier et stat de fichier
+  hosts: all
+  become: true
+
+  tasks:
+    # - name: Création du fichier
+    #   file:
+    #     path: "{{ item.dir }}/{{ item.fic }}"
+    #     state: touch
+    #     owner: sarrenne
+    #   with_items:
+    #   - "{{ fi }}"
+    #   register: __fichier_thione
+
+    # - name: Création de répertoires à partir de l'inventaire avec groups
+    #   file:
+    #     path: "/tmp/hosts/{{ item }}"
+    #     state: directory
+    #     recurse: yes
+    #   with_items:
+    #   - "{{ groups['all'] }}"
+
+    # - name: Création de repertoire à partir de l'inventaire avec with hostname
+    #   file:
+    #     path: "/tmp/hosts/{{ item }}"
+    #     state: directory
+    #     recurse: yes
+    #   with_inventory_hostnames:
+    #     -  db
+
+    - name: Installation de paquets
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      with_items:
+        - "vim"
+        - "net-tools"
+      become: true
+    # - name: show all the hosts matching the pattern, i.e. all but the group www
+    #   ansible.builtin.debug:
+    #     msg: "{{ item }}"
+    #   with_inventory_hostnames:
+    #     - db
+
+    # - name: Test de STAT
+    #   debug:
+    #     msg: "{{ __fichier_thione.mtime }}"

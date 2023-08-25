@@ -1,0 +1,28 @@
+- name: Playboot delegate to...
+  hosts: all
+  connection: local
+  become: true
+
+  tasks:
+    # - name: Creation d'un fichier avec delegate_to
+    #   file:
+    #     path: /tmp/fic.json
+    #     state: touch
+    #   delegate_to: 10.88.0.2
+    #   run_once: true
+
+
+    # - name:
+    #   debug: 
+    #     var: var1
+    #   delegate_to: 10.88.0.2
+
+    # - name: Debug sans délégation  -  avec local_action
+    #   local_action: "command touch /tmp/fichier.json"
+    #   run_once: true
+
+    - name: connexion local
+      file:
+        path: /tmp/fichier2.json
+        owner: sarrenne
+        state: touch
