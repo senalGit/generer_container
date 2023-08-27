@@ -4,8 +4,10 @@ set -eo pipefail
 
 # Variables ###################################################
 export ANSIBLE_DIR="projet_ansible"
-export REPERTOIRE_VARS=("host_vars" "group_vars" "templates" "playbooks" "roles/common/{tasks,handlers}")
+export REPERTOIRE_VARS=("roles" "host_vars" "group_vars" "playbooks")
 export FILE_GROUPS_VARS=("all" "db" "web")
+export hosts=()
+export listroles=("db_role" "app_role" "ssh_keygen_role" "users_role" "nginx_role")
 
 # Functions ###################################################
 
@@ -13,7 +15,7 @@ help() {
   echo "
 Usage: $0 
 -c <number> : create container and add the number of containers
--i : information (ip and name)
+-i : information (ip and name)_role
 -s : start all containers created by this script
 -t : same to stop all containers
 -d : same for drop all containers
@@ -59,8 +61,8 @@ infosContainers() {
 }
 
 dropContainers() {
-  sudo podman ps -a --format {{.Names}} | awk -v user=${USER} '$1 ~ "^"user {print $1" - Suppresseion...";system("sudo podman rm -f "$1)}'
-  infosContainers
+  sudo podman ps -a --format {{.Names}} | awk -v user=${USER} '$1 ~ "^"user {print $1" - Suppresseion..."; system("sudo podman rm -f "$1)}'
+  #infosContainers
 }
 
 startContainers() {
@@ -81,12 +83,14 @@ createAnsible() {
 
   creer_repertoire_ansible
   echo -e "\nStructure du dossier Ansible :"
-  tree ${ANSIBLE_DIR}
+ # tree ${ANSIBLE_DIR}
 }
+
+
 
 creer_repertoire_ansible() {
 
-#local hosts=sudo podman ps -aq | awk '{system("sudo podman inspect -f \"{{.NetworkSettings.IPAddress}}\" "$1)}'
+  #local hosts=sudo podman ps -aq | awk '{system("sudo podman inspect -f \"{{.NetworkSettings.IPAddress}}\" "$1)}'
 
   for REPERTOIRE in ${REPERTOIRE_VARS[@]}; do
     local dir=${ANSIBLE_DIR}/${REPERTOIRE}
@@ -99,11 +103,23 @@ creer_repertoire_ansible() {
       done
       ;;
     host_vars)
-      touch "${dir}/mail.yml"
+      touch "${dir}/main.yml"
       for file in ${hosts[@]}; do
         touch "${dir}/${file}.yml"
       done
       ;;
+    roles)
+      for role in ${listroles[@]}; do
+
+        local sub_dir_role="${dir}/${role}"
+
+        if [ ! -d "${sub_dir_role}" ]; then
+          ansible-galaxy init "${sub_dir_role}"
+        fi
+        
+      done
+      ;;
+
     *)
       echo default
       ;;

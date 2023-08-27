@@ -1,0 +1,3 @@
+---
+# defaults file for projet_ansible/roles/nginx_role
+nginx_port: 80

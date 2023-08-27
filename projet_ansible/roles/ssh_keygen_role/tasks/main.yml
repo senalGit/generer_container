@@ -1,0 +1,11 @@
+---
+# tasks file for projet_ansible/roles/ssh_keygen_role
+- name: Génération de la clé ssh
+  openssh_keypair:
+    path: /tmp/cle_ansible
+    state: present
+    size: 4096
+    type: rsa
+    comment: "Destinées aux machine all"
+  # delegate_to: localhost
+  # run_once: true

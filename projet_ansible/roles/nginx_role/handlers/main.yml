@@ -1,0 +1,6 @@
+---
+# handlers file for projet_ansible/roles/nginx_role
+- name: reload_nginx
+  systemd:
+    name: nginx
+    state: reloaded

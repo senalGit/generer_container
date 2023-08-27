@@ -25,18 +25,7 @@
     - name: Make sure we can use htpasswd module
       apt: "pkg=python-passlib state=present"
 
-    - name: Création du ser devops
-      user:
-        name: devops
-        shell: /bin/bash
-        groups: sudo
-        append: yes
-        password: "{{ 'kirikou' | password_hash('sha512') }}"
 
-    - name: Ajouter le user dans les sudoers
-      copy:
-        dest: "/etc/sudoers.d/devops"
-        content: "devops ALL=(ALL) NOPASSWD: ALL"
 
     
     - name: Deploiement de la clé ssh

@@ -1,0 +1,42 @@
+---
+# tasks file for projet_ansible/roles/nginx_role
+- name: Installation de nginx
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  with_items:
+    - nginx
+    - curl
+    - less
+- name: Nettoyage des fichiers par defaut
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "/etc/nginx/sites-available/default"
+    - "/etc/nginx/sites-enabled/default"
+
+- name: Installation vhosts
+  template:
+    src: default_vhost.conf.j2
+    dest: "/etc/nginx/sites-available/default_vhost.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload_nginx
+
+- name: Création du lien symbolique
+  file:
+    src: "/etc/nginx/sites-available/default_vhost.conf"
+    dest: "/etc/nginx/sites-enabled/default_vhost.conf"
+    state: link
+
+- name: Démarrage de nginx
+  systemd:
+    name: nginx
+    state: started
+
+- name: flush handlers
+  meta: flush_handlers
