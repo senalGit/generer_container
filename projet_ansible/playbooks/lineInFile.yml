@@ -2,28 +2,5 @@
 - name: Playbook de test de lineinfile
   hosts: all
   become: true
-
-  tasks:
-    - name: Test lineinfile
-      lineinfile:
-        path:
-        regexp:
-        state: absent #
-        line:
-        # backrefs: False
-        # insertafter: EOF
-        # insertbefore: BOF
-        # create: False
-        # backup: False
-        # firstmatch: False
-        # others:
-        # mode:
-        # owner:
-        # group:
-        # seuser:
-        # serole:
-        # setype:
-        # selevel: s0
-        # unsafe_writes: False
-        # attributes:
-        # validate:
+  roles:
+    - app_role

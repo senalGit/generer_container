@@ -1,2 +1,7 @@
 ---
-# tasks file for projet_ansible/roles/app_role
+- name: apt repository
+  apt apt_repo:
+    repo:
+    state: absent
+    remove_others: no
+    update: no 
